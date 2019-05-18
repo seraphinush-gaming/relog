@@ -24,6 +24,7 @@ class Relog {
           if (parseInt(name) > this.list.length) {
             this.send(`Invalid argument. number exceeds character count.`);
           } else {
+            this.idx = name;
             this.relog();
           }
         } else {
