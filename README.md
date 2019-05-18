@@ -1,11 +1,37 @@
-# relog
+<p align="center">
+<a href="#">
+<img src="https://github.com/seraphinush-gaming/pastebin/blob/master/logo_ttb_trans.png?raw=true" width="200" height="200" alt="tera-toolbox, logo by Foglio" />
+</a>
+</p>
 
-### Usage
-`!relog name` in chat, then don't touch anything until the module logs in for you
+# relog [![paypal](https://img.shields.io/badge/paypal-donate-333333.svg?colorA=253B80&colorB=333333)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=B7QQJZV9L5P2J&source=url) [![paypal.me](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=169BD7&colorB=333333)](https://www.paypal.me/seraphinush)
+tera-toolbox module to to switch character by chat command
+```
+Support seraph via paypal donations, thanks in advance !
+```
 
-[slash](https://github.com/baldera-mods/slash) is supported but not required
+## Auto-update guide
+- Create a folder called `relog` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/ylennia-archives/relog/master/module.json) << (right-click this link and save as..) into the folder
 
-### Known Issues
-If your character gets hit within 10 seconds of using `!relog`, the client and server state will be desynced and you will have to restart client.
+## Usage
+- __`relog {name}`__
+  - Relog to user `name`
+- __`relog {n}`__
+  - Relog to `n`-th character in your character list
+- __`relog nx`__
+  - Relog to the next character in your character list
+  - Wraps back around to the first character in your character list
 
-If you use `!relog` while dead, the client will crash.
+## Known issues
+- If your character gets hit within 10 seconds of relog, the client and server state will desync and you will have to restart client.
+- If you use relog while dead, the client will crash.
+
+## Changelog
+<details>
+
+    2.00
+    - Revised code
+    1.00
+    - Initial fork
+
+</details>

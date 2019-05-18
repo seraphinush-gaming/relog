@@ -1,0 +1,14 @@
+{
+	"files": {
+		"README.md": "8c6dac5d79fd53bdcef7d035549acd10af34a1b8a065db85760b45f912312665",
+		"index.js": "3f1a71593c76c222d06c099bcc9dcb5e199665c4a13af2ccbbedca720d68d9d2",
+		"module.json": "7d1e2f5c8b3618a82b3cd103f022d8fb8d6939bf7e3c34238507923fb5063d5f"
+	},
+	"defs": {
+		"C_RETURN_TO_LOBBY": 1,
+		"C_SELECT_USER": 1,
+		"S_GET_USER_LIST": 15,
+		"S_PREPARE_RETURN_TO_LOBBY": 1,
+		"S_RETURN_TO_LOBBY": 1
+	}
+}

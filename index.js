@@ -1,89 +1,118 @@
-const S = require('./string')
+'use strict';
 
-module.exports = function Relog(dispatch) {
+class Relog {
 
-  dispatch.hook('C_WHISPER', 1, chatHook)
-  dispatch.hook('C_CHAT', 1, chatHook)
+  constructor(mod) {
 
-  function chatHook(event) {
-    const args = S.decodeHTMLEntities(S.stripTags(event.message))
-      .split(/\s+/)
-    const name = args.reduce((out, part) => {
-      if (part.toLowerCase() === '!relog') return true
-      if (out === true) return part
-      return out
-    }, false)
+    this.mod = mod;
+    this.cmd = mod.command;
 
-    if (name) {
-      relogByName(name)
-      return false
+    this.idx = -1;
+    this.list = [];
+
+    this.cmd.add(['relog', '재접'], {
+      'nx': () => {
+        (++this.idx) > this.list.length ? this.idx = 1 : null;
+        this.relog();
+      },
+      '+': () => {
+        (++this.idx) > this.list.length ? this.idx = 1 : null;
+        this.relog();
+      },
+      '$default': (name) => {
+        if (!isNaN(name)) {
+          if (parseInt(name) > this.list.length) {
+            this.send(`Invalid argument. number exceeds character count.`);
+          } else {
+            this.relog();
+          }
+        } else {
+          if (this.getUserIndex(name)) {
+            this.relog();
+          } else {
+            this.send(`Invalid argument. character does not exist.`);
+          }
+        }
+      },
+      'none': () => { this.send(`Invalid argument. usage : relog ([name|number])`); }
+    })
+
+    this.mod.hookOnce('S_GET_USER_LIST', 15, { order: -100 }, (e) => {
+      this.list = [];
+      e.characters.forEach((c, i) => {
+        let { id, name, position } = c;
+        this.list[i] = { id, name, position };
+      });
+    });
+
+    this.mod.hook('C_SELECT_USER', 1, { order: 100, filter: { fake: null } }, (e) => {
+      this.idx = this.list.find((c) => c.id === e.id).position;
+      console.log('.. relogging into character ' + this.list[this.idx - 1].name);
+    });
+
+  }
+
+  destructor() {
+    this.cmd.remove(['relog', '재접']);
+
+    this.list = undefined;
+    this.idx = undefined;
+
+    this.cmd = undefined;
+    this.mod = undefined;
+  }
+
+  // helper
+  getUserIndex(name) {
+    let res = this.list.find((c) => c.name.toLowerCase() === name.toLowerCase());
+    if (res) {
+      this.idx = res.position;
+      return true;
+    } else {
+      return false;
     }
   }
 
-  function relogByName(name) {
-    if (!name) return
-    getCharacterId(name)
-      .then(relog)
-      .catch(e => console.error(e.message))
+  relog() {
+    let id = this.list[this.idx - 1].id
+
+    this.mod.send('C_RETURN_TO_LOBBY', 1, {});
+
+    let hook_2;
+    let hook_1 = this.mod.hookOnce('S_PREPARE_RETURN_TO_LOBBY', 1, () => {
+      this.mod.send('S_RETURN_TO_LOBBY', 1, {});
+
+      hook_2 = this.mod.hookOnce('S_RETURN_TO_LOBBY', 1, () => {
+        process.nextTick(() => {
+          this.mod.send('C_SELECT_USER', 1, { id: id, unk: 0 });
+        });
+      });
+    });
+
+    this.mod.setTimeout(() => {
+      if (hook_1) this.mod.unhook(hook_1);
+      if (hook_2) this.mod.unhook(hook_2);
+    }, 15000);
   }
 
-  function getCharacterId(name) {
-    return new Promise((resolve, reject) => {
-      // request handler, resolves with character's playerId
-      const userListHook = dispatch.hookOnce('S_GET_USER_LIST', 1, event => {
-        event.characters.forEach(char => {
-          if (char.name.toLowerCase() === name.toLowerCase())
-            resolve(char.id)
-        })
-        reject(new Error(`[relog] character "${name}" not found`))
-      })
+  send() { this.cmd.message(': ' + [...arguments].join('\n\t - ')); }
 
-      // set a timeout for the request, in case something went wrong
-      setTimeout(() => {
-        if (userListHook) dispatch.unhook(userListHook)
-        reject(new Error('[relog] C_GET_USER_LIST request timed out'))
-      }, 5000)
-
-      // request the character list
-      dispatch.toServer('C_GET_USER_LIST', 1, {})
-    })
+  // reload
+  saveState() {
+    let state = {
+      userIndex: this.idx,
+      userList: this.list
+    }
+    return state;
   }
 
-  function relog(targetId) {
-    if (!targetId) return
-    dispatch.toServer('C_RETURN_TO_LOBBY', 1, {})
-    let userListHook
-    let lobbyHook
-
-    // make sure that the client is able to log out
-    const prepareLobbyHook = dispatch.hookOnce('S_PREPARE_RETURN_TO_LOBBY', 1, () => {
-      dispatch.toClient('S_RETURN_TO_LOBBY', 1, {})
-
-      // the server is not ready yet, displaying "Loading..." as char names
-      userListHook = dispatch.hookOnce('S_GET_USER_LIST', 1, event => {
-        event.characters.forEach(char => char.name = 'Loading...')
-        return true
-      })
-
-      // the server is ready to relog to a new character
-      lobbyHook = dispatch.hookOnce('S_RETURN_TO_LOBBY', 1, () => {
-        dispatch.toServer('C_SELECT_USER', 1, { id: targetId, unk: 0 })
-      })
-    })
-
-    // hook timeout, in case something goes wrong
-    setTimeout(() => {
-      for (const hook of [prepareLobbyHook, lobbyHook, userListHook])
-        if (hook) dispatch.unhook(hook)
-    }, 15000)
+  loadState(state) {
+    this.idx = state.userIndex;
+    this.list = state.userList;
   }
 
-  // slash support
-  try {
-    const Slash = require('slash')
-    const slash = new Slash(dispatch)
-    slash.on('relog', args => args[1] ? relogByName(args[1]) : false)
-  } catch (e) {
-    // do nothing because slash is optional
-  }
+}
+
+module.exports = function RelogLoader(mod) {
+  return new Relog(mod);
 }
