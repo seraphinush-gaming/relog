@@ -38,7 +38,7 @@ class Relog {
       'none': () => { this.send(`Invalid argument. usage : relog ([name|number])`); }
     })
 
-    this.mod.hookOnce('S_GET_USER_LIST', 15, { order: -100 }, (e) => {
+    this.mod.hookOnce('S_GET_USER_LIST', 16, { order: -100 }, (e) => {
       this.list = [];
       e.characters.forEach((c, i) => {
         let { id, name, position } = c;

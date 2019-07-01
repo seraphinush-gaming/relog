@@ -1,5 +1,5 @@
 {
-  "author": "seraphinush | some-av-popo | wuaw",
+  "author": "seraphinush . some-av-popo . wuaw",
   "description": "tera-toolbox module to to switch character by chat command",
   "disableAutoUpdate": false,
   "donationUrl": "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=B7QQJZV9L5P2J&source=url",
@@ -11,5 +11,5 @@
     "https://raw.githubusercontent.com/ylennia-archives/relog/master/"
   ],
   "supportUrl": "https://github.com/ylennia-archives/relog/blob/master/README.md",
-  "version": "2.00.02"
+  "version": "2.00.03"
 }
