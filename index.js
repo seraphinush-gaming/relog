@@ -48,7 +48,7 @@ class Relog {
 
     this.mod.hook('C_SELECT_USER', 1, { order: 100, filter: { fake: null } }, (e) => {
       this.idx = this.list.find((c) => c.id === e.id).position;
-      console.log('.. relogging into character ' + this.list[this.idx - 1].name);
+      console.log('.. relogging into character ' + (this.idx - 1) + '. ' + this.list[this.idx - 1].name);
     });
 
   }
