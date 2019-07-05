@@ -13,12 +13,12 @@ Support seraph via paypal donations, thanks in advance !
 ## Auto-update guide
 - Create a folder called `relog` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/ylennia-archives/relog/master/module.json) << (right-click this link and save as..) into the folder
 
-## Usage
+## Usage : `relog` | `캐선`
 - __`relog {name}`__
   - Relog to user `name`
 - __`relog {n}`__
   - Relog to `n`-th character in your character list
-- __`relog nx`__
+- __`relog nx` | `relog +`__
   - Relog to the next character in your character list
   - Wraps back around to the first character in your character list
 

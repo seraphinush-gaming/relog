@@ -10,7 +10,7 @@ class Relog {
     this.idx = -1;
     this.list = [];
 
-    this.cmd.add(['relog', '재접'], {
+    this.cmd.add(['relog', '캐선'], {
       'nx': () => {
         (++this.idx) > this.list.length ? this.idx = 1 : null;
         this.relog();
@@ -36,7 +36,7 @@ class Relog {
         }
       },
       'none': () => { this.send(`Invalid argument. usage : relog ([name|number])`); }
-    })
+    });
 
     this.mod.hookOnce('S_GET_USER_LIST', 16, { order: -100 }, (e) => {
       this.list = [];
@@ -54,7 +54,7 @@ class Relog {
   }
 
   destructor() {
-    this.cmd.remove(['relog', '재접']);
+    this.cmd.remove(['relog', '캐선']);
 
     this.list = undefined;
     this.idx = undefined;
