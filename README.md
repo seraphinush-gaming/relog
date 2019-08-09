@@ -21,6 +21,8 @@ Support seraph via paypal donations, thanks in advance !
 - __`relog nx` | `relog +`__
   - Relog to the next character in your character list
   - Wraps back around to the first character in your character list
+- __`relog list`__
+  - Send character list to player chat
 
 ## Known issues
 - If your character gets hit within 10 seconds of relog, the client and server state will desync and you will have to restart client.
@@ -29,6 +31,8 @@ Support seraph via paypal donations, thanks in advance !
 ## Changelog
 <details>
 
+    2.01
+    - Added `list` option
     2.00
     - Revised code
     1.00

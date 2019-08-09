@@ -7,48 +7,67 @@ class Relog {
     this.mod = mod;
     this.cmd = mod.command;
 
-    this.idx = -1;
+    this.index = -1;
     this.list = [];
 
     this.cmd.add(['relog', '캐선'], {
+      '$none': () => {
+        if (this.mod.region === 'kr') {
+          this.send(`유효하지 않는 명령어. 사용 : 캐선 [list|nx|+|(이름)|(숫자)]`);
+        } else {
+          this.send(`Invalid argument. usage : relog [list|nx|+|(name)|(num)]`);
+        }
+      },
+      'list': () => {
+        this.list.forEach((c, i) => { this.send(i + ' : ' + c.name) });
+      },
       'nx': () => {
-        (++this.idx) > this.list.length ? this.idx = 1 : null;
-        this.relog();
+        this.tryRelogNext();
       },
       '+': () => {
-        (++this.idx) > this.list.length ? this.idx = 1 : null;
-        this.relog();
+        this.tryRelogNext();
       },
       '$default': (name) => {
-        if (!isNaN(name)) {
-          if (parseInt(name) > this.list.length) {
-            this.send(`Invalid argument. number exceeds character count.`);
+        let index = parseInt(name);
+        if (!isNaN(index)) {
+          if (index > this.list.length) {
+            if (this.mod.region === 'kr') {
+              this.send(`유효하지 않는 명령어. 캐릭터 수보다 더 큰 숫자입니다.`);
+            } else {
+              this.send(`Invalid argument. number exceeds character count.`);
+            }
           } else {
-            this.idx = name;
+            this.index = index - 1;
             this.relog();
           }
         } else {
           if (this.getUserIndex(name)) {
             this.relog();
           } else {
-            this.send(`Invalid argument. character does not exist.`);
+            if (this.mod.region === 'kr') {
+              this.send(`유효하지 않는 명령어. 없는 캐릭터입니다.`);
+            } else {
+              this.send(`Invalid argument. character does not exist.`);
+            }
           }
         }
       },
       'none': () => { this.send(`Invalid argument. usage : relog ([name|number])`); }
     });
 
-    this.mod.hookOnce('S_GET_USER_LIST', 16, { order: -100 }, (e) => {
-      this.list = [];
-      e.characters.forEach((c, i) => {
+    this.mod.hookOnce('S_GET_USER_LIST', this.mod.majorPatchVersion >= 85 ? 0 : 15, { order: -100 }, (e) => {
+      e.characters.forEach((c) => {
         let { id, name, position } = c;
-        this.list[i] = { id, name, position };
+        console.log(position + ', ' + id + ', ' + name);
+        this.list[--position] = { id, name };
       });
     });
 
     this.mod.hook('C_SELECT_USER', 1, { order: 100, filter: { fake: null } }, (e) => {
-      this.idx = this.list.find((c) => c.id === e.id).position;
-      console.log('.. relogging into character ' + this.idx + '. ' + this.list[this.idx - 1].name);
+      this.index = this.list.findIndex((c) => {
+        return c.id === e.id;
+      });
+      console.log('.. relogging into character ' + (this.index + 1) + '. ' + this.list[this.index].name);
     });
 
   }
@@ -57,7 +76,7 @@ class Relog {
     this.cmd.remove(['relog', '캐선']);
 
     this.list = undefined;
-    this.idx = undefined;
+    this.index = undefined;
 
     this.cmd = undefined;
     this.mod = undefined;
@@ -65,17 +84,16 @@ class Relog {
 
   // helper
   getUserIndex(name) {
-    let res = this.list.find((c) => c.name.toLowerCase() === name.toLowerCase());
-    if (res) {
-      this.idx = res.position;
+    let res = this.list.findIndex((c) => c.name.toLowerCase() === name.toLowerCase());
+    if (res >= 0) {
+      this.index = res;
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   relog() {
-    let id = this.list[this.idx - 1].id
+    let id = this.list[this.index].id;
 
     this.mod.send('C_RETURN_TO_LOBBY', 1, {});
 
@@ -96,20 +114,29 @@ class Relog {
     }, 15000);
   }
 
+  tryRelogNext() {
+    if (this.list[++this.index]) {
+      this.relog();
+    } else {
+      this.index = 0;
+      this.relog();
+    }
+  }
+
   send() { this.cmd.message(': ' + [...arguments].join('\n\t - ')); }
 
   // reload
   saveState() {
     let state = {
-      userIndex: this.idx,
-      userList: this.list
+      index: this.index,
+      list: this.list
     }
     return state;
   }
 
   loadState(state) {
-    this.idx = state.userIndex;
-    this.list = state.userList;
+    this.index = state.index;
+    this.list = state.list;
   }
 
 }
