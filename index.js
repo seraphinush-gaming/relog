@@ -55,10 +55,9 @@ class Relog {
       'none': () => { this.send(`Invalid argument. usage : relog ([name|number])`); }
     });
 
-    this.mod.hookOnce('S_GET_USER_LIST', this.mod.majorPatchVersion >= 85 ? 0 : 15, { order: -100 }, (e) => {
+    this.mod.hookOnce('S_GET_USER_LIST', (this.mod.majorPatchVersion >= 85) ? 0 : (this.mod.majorPatchVersion === 85 ? 16 : 15), { order: -100 }, (e) => {
       e.characters.forEach((c) => {
         let { id, name, position } = c;
-        console.log(position + ', ' + id + ', ' + name);
         this.list[--position] = { id, name };
       });
     });

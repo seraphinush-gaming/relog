@@ -1,8 +1,8 @@
 {
 	"files": {
 		"README.md": "8453bf37ca1dcebc0865014e423cd4f3b4fa5e0d703f24edccb5c0276d0fad15",
-		"index.js": "365519c36cc06ad4e04b04ba171c5694ff6780dd6550e6118324ad3124040be8",
-		"module.json": "d5bf31a65cb9ee4f056bc8ce451e8f1845674eaaacbeb27269885c5ec088f311"
+		"index.js": "d99c8175728c349b987d4a49cb84a868afd1a283aa47fc5241a0fba772a337b7",
+		"module.json": "eb6d2be219fcaefb5b4a760dca351f33cee608b60690f0110140848def094e04"
 	},
 	"defs": {
 		"C_RETURN_TO_LOBBY": 1,
