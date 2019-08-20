@@ -13,9 +13,9 @@ class Relog {
     this.cmd.add(['relog', '캐선'], {
       '$none': () => {
         if (this.mod.region === 'kr') {
-          this.send(`유효하지 않는 명령어. 사용 : 캐선 [list|nx|+|(이름)|(숫자)]`);
+          this.send(`유효하지 않은 명령어입니다. 사용 : 캐선 [(이름)|(숫자)|list|nx|+]`);
         } else {
-          this.send(`Invalid argument. usage : relog [list|nx|+|(name)|(num)]`);
+          this.send(`Invalid argument. usage : relog [(name)|(num)|list|nx|+]`);
         }
       },
       'list': () => {
@@ -32,7 +32,7 @@ class Relog {
         if (!isNaN(index)) {
           if (index > this.list.length) {
             if (this.mod.region === 'kr') {
-              this.send(`유효하지 않는 명령어. 캐릭터 수보다 더 큰 숫자입니다.`);
+              this.send(`유효하지 않은 명령어입니다. 캐릭터 수보다 더 큰 숫자입니다.`);
             } else {
               this.send(`Invalid argument. number exceeds character count.`);
             }
@@ -45,14 +45,13 @@ class Relog {
             this.relog();
           } else {
             if (this.mod.region === 'kr') {
-              this.send(`유효하지 않는 명령어. 없는 캐릭터입니다.`);
+              this.send(`유효하지 않은 명령어입니다. 없는 캐릭터입니다.`);
             } else {
               this.send(`Invalid argument. character does not exist.`);
             }
           }
         }
-      },
-      'none': () => { this.send(`Invalid argument. usage : relog ([name|number])`); }
+      }
     });
 
     this.mod.hookOnce('S_GET_USER_LIST', (this.mod.majorPatchVersion >= 85) ? 0 : (this.mod.majorPatchVersion === 85 ? 16 : 15), { order: -100 }, (e) => {
