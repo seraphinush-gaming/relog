@@ -1,13 +1,13 @@
 {
 	"files": {
 		"README.md": "8453bf37ca1dcebc0865014e423cd4f3b4fa5e0d703f24edccb5c0276d0fad15",
-		"index.js": "aa25291f863f2feeb366dc7eb4026cf67652352800f1cef7aab26fd276fb1cfb",
-		"module.json": "660b7f39b05e218d87fdfae384a77652dd9e2fc4b59515901d15e585de603951"
+		"index.js": "6fbe8290b0a9b633178bb5cd71a07c725304dcb3b56c542ae222582b9016815e",
+		"module.json": "4f35198d3201c8cffe593c62710c7e4dd83570634c0c839614ac4fbc867585b3"
 	},
 	"defs": {
 		"C_RETURN_TO_LOBBY": 1,
 		"C_SELECT_USER": 1,
-		"S_GET_USER_LIST": 15,
+		"S_GET_USER_LIST": 16,
 		"S_PREPARE_RETURN_TO_LOBBY": 1,
 		"S_RETURN_TO_LOBBY": 1
 	}

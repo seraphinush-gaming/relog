@@ -19,7 +19,7 @@ class Relog {
         }
       },
       'list': () => {
-        this.list.forEach((c, i) => { this.send(i + ' : ' + c.name) });
+        this.list.forEach((c, i) => { this.send((i+1) + ' : ' + c.name) });
       },
       'nx': () => {
         this.tryRelogNext();
@@ -54,7 +54,7 @@ class Relog {
       }
     });
 
-    this.mod.hookOnce('S_GET_USER_LIST', (this.mod.majorPatchVersion >= 85) ? 0 : (this.mod.majorPatchVersion === 85 ? 16 : 15), { order: -100 }, (e) => {
+    this.mod.hookOnce('S_GET_USER_LIST', this.mod.majorPatchVersion >= 86 ? 0 : 16, { order: -100 }, (e) => {
       e.characters.forEach((c) => {
         let { id, name, position } = c;
         this.list[--position] = { id, name };
@@ -139,6 +139,4 @@ class Relog {
 
 }
 
-module.exports = function RelogLoader(mod) {
-  return new Relog(mod);
-}
+module.exports = Relog;
