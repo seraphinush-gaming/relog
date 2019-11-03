@@ -1,87 +1,71 @@
 'use strict';
 
-class Relog {
+const { get_message } = require('./language.js');
+
+class relog {
 
   constructor(mod) {
 
-    this.mod = mod;
-    this.cmd = mod.command;
+    this.m = mod;
+    this.c = mod.command;
 
     this.index = -1;
     this.list = [];
 
-    this.cmd.add(['relog', '캐선'], {
+    this.c.add(['relog', '캐선'], {
       '$none': () => {
-        if (this.mod.region === 'kr') {
-          this.send(`유효하지 않은 명령어입니다. 사용 : 캐선 [(이름)|(숫자)|list|nx|+]`);
-        } else {
-          this.send(`Invalid argument. usage : relog [(name)|(num)|list|nx|+]`);
-        }
+        this.send(get_message(this.m.region, 'error_non_exist'));
       },
       'list': () => {
-        this.list.forEach((c, i) => { this.send((i+1) + ' : ' + c.name) });
+        this.list.forEach((c, i) => { this.send((i+1) + ' : ' + c.name); });
       },
       'nx': () => {
-        this.tryRelogNext();
+        this.try_relog_next();
       },
       '+': () => {
-        this.tryRelogNext();
+        this.try_relog_next();
       },
       '$default': (name) => {
         let index = parseInt(name);
         if (!isNaN(index)) {
           if (index > this.list.length) {
-            if (this.mod.region === 'kr') {
-              this.send(`유효하지 않은 명령어입니다. 캐릭터 수보다 더 큰 숫자입니다.`);
-            } else {
-              this.send(`Invalid argument. number exceeds character count.`);
-            }
+            this.send(get_message(this.m.region, 'error_char_non_exist'));
           } else {
             this.index = index - 1;
             this.relog();
           }
         } else {
-          if (this.getUserIndex(name)) {
+          if (this.get_user_index(name)) {
             this.relog();
           } else {
-            if (this.mod.region === 'kr') {
-              this.send(`유효하지 않은 명령어입니다. 없는 캐릭터입니다.`);
-            } else {
-              this.send(`Invalid argument. character does not exist.`);
-            }
+            this.send(get_message(this.m.region, 'error_char_exceed_count'));
           }
         }
       }
     });
 
-    this.mod.hookOnce('S_GET_USER_LIST', this.mod.majorPatchVersion >= 86 ? 0 : 16, { order: -100 }, (e) => {
+    this.m.hookOnce('S_GET_USER_LIST', this.m.majorPatchVersion >= 86 ? 17 : 16, { order: -100 }, (e) => {
       e.characters.forEach((c) => {
         let { id, name, position } = c;
         this.list[--position] = { id, name };
       });
     });
 
-    this.mod.hook('C_SELECT_USER', 1, { order: 100, filter: { fake: null } }, (e) => {
+    this.m.hook('C_SELECT_USER', 1, { order: 100, filter: { fake: null } }, (e) => {
       this.index = this.list.findIndex((c) => {
         return c.id === e.id;
       });
-      console.log('.. relogging into character ' + (this.index + 1) + '. ' + this.list[this.index].name);
+      this.m.log('.. relogging into character ' + (this.index + 1) + '. ' + this.list[this.index].name);
     });
 
   }
 
   destructor() {
-    this.cmd.remove(['relog', '캐선']);
-
-    this.list = undefined;
-    this.index = undefined;
-
-    this.cmd = undefined;
-    this.mod = undefined;
+    this.c.remove(['relog', '캐선']);
   }
 
   // helper
-  getUserIndex(name) {
+  get_user_index(name) {
     let res = this.list.findIndex((c) => c.name.toLowerCase() === name.toLowerCase());
     if (res >= 0) {
       this.index = res;
@@ -93,26 +77,26 @@ class Relog {
   relog() {
     let id = this.list[this.index].id;
 
-    this.mod.send('C_RETURN_TO_LOBBY', 1, {});
+    this.m.send('C_RETURN_TO_LOBBY', 1, {});
 
     let hook_2;
-    let hook_1 = this.mod.hookOnce('S_PREPARE_RETURN_TO_LOBBY', 1, () => {
-      this.mod.send('S_RETURN_TO_LOBBY', 1, {});
+    let hook_1 = this.m.hookOnce('S_PREPARE_RETURN_TO_LOBBY', 1, () => {
+      this.m.send('S_RETURN_TO_LOBBY', 1, {});
 
-      hook_2 = this.mod.hookOnce('S_RETURN_TO_LOBBY', 1, () => {
+      hook_2 = this.m.hookOnce('S_RETURN_TO_LOBBY', 1, () => {
         process.nextTick(() => {
-          this.mod.send('C_SELECT_USER', 1, { id: id, unk: 0 });
+          this.m.send('C_SELECT_USER', 1, { id: id, unk: 0 });
         });
       });
     });
 
-    this.mod.setTimeout(() => {
-      if (hook_1) this.mod.unhook(hook_1);
-      if (hook_2) this.mod.unhook(hook_2);
+    this.m.setTimeout(() => {
+      if (hook_1) this.m.unhook(hook_1);
+      if (hook_2) this.m.unhook(hook_2);
     }, 15000);
   }
 
-  tryRelogNext() {
+  try_relog_next() {
     if (this.list[++this.index]) {
       this.relog();
     } else {
@@ -121,7 +105,7 @@ class Relog {
     }
   }
 
-  send() { this.cmd.message(': ' + [...arguments].join('\n\t - ')); }
+  send() { this.c.message(': ' + [...arguments].join('\n\t - ')); }
 
   // reload
   saveState() {
@@ -139,4 +123,4 @@ class Relog {
 
 }
 
-module.exports = Relog;
+module.exports = relog;
