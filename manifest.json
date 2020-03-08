@@ -1,9 +1,9 @@
 {
 	"files": {
-		"README.md": "8453bf37ca1dcebc0865014e423cd4f3b4fa5e0d703f24edccb5c0276d0fad15",
+		"README.md": "42861bded35ea934c1fb22d333bdaddf69d4e636ce037e0a7cfe1ec7115a653f",
 		"index.js": "9e69c751b707b1e4c55550c072e845337beb5a2491e26133a0f9454db15a67da",
 		"language.js": "2d2a5419582b651acadfff3decb4f21af33ce9e496a55d391d8552a9f0ad06e2",
-		"module.json": "739aa7c11a9703dd9a4c9cb533203cdc13e105e9edf99fadf7ca1069793af995"
+		"module.json": "d3a91672d91fec4476a18b980419eaf65cc18ea0458e93b3ae3a0f0a293d2873"
 	},
 	"defs": {
 		"C_RETURN_TO_LOBBY": 1,
