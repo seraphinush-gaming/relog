@@ -29,7 +29,7 @@ class relog {
         let index = parseInt(name);
         if (!isNaN(index)) {
           if (index > this.list.length) {
-            this.send(get_message(this.m.region, 'error_char_non_exist'));
+            this.send(get_message(this.m.region, 'error_char_exceed_count'));
           } else {
             this.index = index - 1;
             this.relog();
@@ -38,7 +38,7 @@ class relog {
           if (this.get_user_index(name)) {
             this.relog();
           } else {
-            this.send(get_message(this.m.region, 'error_char_exceed_count'));
+            this.send(get_message(this.m.region, 'error_char_non_exist'));
           }
         }
       }
