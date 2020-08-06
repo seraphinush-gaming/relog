@@ -1,15 +1,8 @@
 {
-	"files": {
-		"README.md": "42861bded35ea934c1fb22d333bdaddf69d4e636ce037e0a7cfe1ec7115a653f",
-		"index.js": "9e69c751b707b1e4c55550c072e845337beb5a2491e26133a0f9454db15a67da",
-		"language.js": "2d2a5419582b651acadfff3decb4f21af33ce9e496a55d391d8552a9f0ad06e2",
-		"module.json": "d3a91672d91fec4476a18b980419eaf65cc18ea0458e93b3ae3a0f0a293d2873"
-	},
-	"defs": {
-		"C_RETURN_TO_LOBBY": 1,
-		"C_SELECT_USER": 1,
-		"S_GET_USER_LIST": [16,17],
-		"S_PREPARE_RETURN_TO_LOBBY": 1,
-		"S_RETURN_TO_LOBBY": 1
-	}
+  "files": {
+    "README.md": "9bcb1dfa0043536361f10d32a706ad986158c9666f87136db678ff786d12d7b6",
+    "index.js": "a5fe36844f751626838d6f1d8b77f1b515f3513f0c2dda59fba934f9566dd7da",
+    "language.js": "f68012bdd63cd15ece7098a22be643d356d7d040f9c3a842a979da52c51d1e5c",
+    "module.json": "6e8be70b937b2497c71454f3ef9d74705e114a2b5391cceb0ef0ab0576fd5678"
+  }
 }
