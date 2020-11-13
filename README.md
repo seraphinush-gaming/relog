@@ -8,15 +8,17 @@ tera-toolbox module to switch character by chat command
 ## Auto-update guide
 - Create a folder called `relog` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/ylennia-archives/relog/master/module.json) << (right-click this link and save as..) into the folder
 
-## Usage : `relog` | `캐선`
-- __`relog <name>`__
+## Usage
+- __`relog` | `캐선`__
+### Arguments
+- __`<name>`__
   - Relog to user `name`
-- __`relog <n>`__
+- __`<n>`__
   - Relog to `n`-th character in your character list
-- __`relog nx` | `relog +`__
+- __`nx` | `+`__
   - Relog to the next character in your character list
   - Wraps back around to the first character in your character list
-- __`relog list`__
+- __`list`__
   - Send character list to player chat
 
 ## Known issues
