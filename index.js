@@ -9,9 +9,11 @@ class relog {
     this.mod = mod;
     this.command = mod.command;
 
+    // init
     this.index = -1;
     this.list = [];
 
+    // command
     mod.command.add(['relog', '캐선'], {
       '$none': () => {
         this.send(get_message(mod.publisher, 'error_cmd_non_exist'));
