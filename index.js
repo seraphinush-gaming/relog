@@ -47,7 +47,7 @@ class relog {
     });
 
     // code
-    mod.hookOnce('S_GET_USER_LIST', mod.majorPatchVersion >= 95 ? 18 : 17, { order: -100 }, (e) => {
+    mod.hookOnce('S_GET_USER_LIST', mod.majorPatchVersion >= 101 ? 19 : 18, { order: -100 }, (e) => {
       e.characters.forEach((ch) => {
         let { id, name, position } = ch;
         this.list[--position] = { id, name };
