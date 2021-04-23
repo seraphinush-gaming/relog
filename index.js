@@ -21,7 +21,13 @@ class relog {
       'list': () => {
         this.list.forEach((ch, i) => { this.send((i + 1) + ' : ' + ch.name); });
       },
+      '목록': () => {
+        this.list.forEach((ch, i) => { this.send((i + 1) + ' : ' + ch.name); });
+      },
       'nx': () => {
+        this.try_relog_next();
+      },
+      '다음': () => {
         this.try_relog_next();
       },
       '$default': (name) => {
