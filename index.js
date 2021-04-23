@@ -24,9 +24,6 @@ class relog {
       'nx': () => {
         this.try_relog_next();
       },
-      '+': () => {
-        this.try_relog_next();
-      },
       '$default': (name) => {
         let index = parseInt(name);
         if (!isNaN(index)) {
@@ -48,7 +45,8 @@ class relog {
 
     // code
     // mod.majorPatchVersion >= 101 ? 19 : 18
-    mod.hookOnce('S_GET_USER_LIST', mod.majorPatchVersion >= 103 ? 20 : 19, { order: -100 }, (e) => {
+    // mod.majorPatchVersion >= 103 ? 20 : 19
+    mod.hookOnce('S_GET_USER_LIST', mod.majorPatchVersion >= 104 ? 21 : 20, { order: -100 }, (e) => {
       e.characters.forEach((ch) => {
         let { id, name, position } = ch;
         this.list[--position] = { id, name };
