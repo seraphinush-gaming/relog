@@ -46,7 +46,8 @@ class relog {
             this.send(get_message(mod.publisher, 'error_char_non_exist'));
           }
         }
-      }
+      },
+      '?': () => this.send(get_message(mod.publisher, 'info'))
     });
 
     // code
