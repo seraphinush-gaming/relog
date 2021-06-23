@@ -2,7 +2,7 @@
 
 const { get_message } = require('./language.js');
 
-class relog {
+class Relog {
 
   constructor(mod) {
 
@@ -25,10 +25,10 @@ class relog {
         this.list.forEach((ch, i) => { this.send((i + 1) + ' : ' + ch.name); });
       },
       'nx': () => {
-        this.try_relog_next();
+        this.relogNext();
       },
       '다음': () => {
-        this.try_relog_next();
+        this.relogNext();
       },
       '$default': (name) => {
         let index = parseInt(name);
@@ -103,9 +103,8 @@ class relog {
     }, 15000);
   }
 
-  try_relog_next() {
-    if (!this.list[++this.index])
-      this.index = 0;
+  relogNext() {
+    if (!this.list[++this.index]) this.index = 0;
     this.relog();
   }
 
@@ -127,4 +126,4 @@ class relog {
 
 }
 
-module.exports = { NetworkMod: relog };
+module.exports = { NetworkMod: Relog };

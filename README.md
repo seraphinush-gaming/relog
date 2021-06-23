@@ -20,6 +20,8 @@ tera-toolbox module to switch character by chat command
   - Wraps back around to the first character in your character list
 - `list` · `목록`
   - Send character list to player chat
+- `?`
+  - Send command and arguments to chat
 
 ## Known issues
 - If your character gets hit within 10 seconds of relog, the client and server state will desync and you will have to restart client.
@@ -30,6 +32,7 @@ tera-toolbox module to switch character by chat command
     2.02
     - Changed `+` option to `다음` option
     - Added `목록` option as alias to `list` option
+    - Added `?` option
     2.01
     - Added `list` option
     2.00
