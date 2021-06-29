@@ -55,7 +55,7 @@ class Relog {
     // mod.majorPatchVersion >= 103 ? 20 : 19
     mod.hookOnce('S_GET_USER_LIST', mod.majorPatchVersion >= 104 ? 21 : 20, { order: -100 }, (e) => {
       e.characters.forEach((ch) => {
-        const { id, name, position } = ch;
+        let { id, name, position } = ch;
         this.list[--position] = { id, name };
       });
     });
