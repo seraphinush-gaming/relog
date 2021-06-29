@@ -7,7 +7,7 @@
   "options": {
     "reloadable": true
   },
-  "servers": ["https://raw.githubusercontent.com/ylennia-archives/relog/master/"],
-  "supportUrl": "https://github.com/ylennia-archives/relog/blob/master/README.md",
-  "version": "2.02.03.v106.02"
+  "servers": ["https://raw.githubusercontent.com/seraphinush-gaming/relog/master/"],
+  "supportUrl": "https://github.com/seraphinush-gaming/relog/blob/master/README.md",
+  "version": "2.02.04.v107.02"
 }

@@ -6,14 +6,15 @@ Support seraph via donations, thanks in advance !
 tera-toolbox module to switch character by chat command
 
 ## Auto-update guide
-- Create a folder called `relog` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/ylennia-archives/relog/master/module.json) << (right-click this link and save as..) into the folder
+- Create a folder called `relog` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/seraphinush-gaming/relog/master/module.json) << (right-click this link and save as..) into the folder
 
 ## Usage
 - `relog` · `캐선`
+
 ### Arguments
 - `<name>`
   - Relog to user `name`
-- `<n>`
+- `<n>` 
   - Relog to `n`-th character in your character list
 - `nx` · `다음`
   - Relog to the next character in your character list
@@ -29,6 +30,7 @@ tera-toolbox module to switch character by chat command
 
 ## Changelog
 <details>
+
     2.02
     - Changed `+` option to `다음` option
     - Added `목록` option as alias to `list` option

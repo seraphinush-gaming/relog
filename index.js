@@ -40,7 +40,7 @@ class Relog {
             this.relog();
           }
         } else {
-          if (this.get_user_index(name)) {
+          if (this.get_userIndex(name)) {
             this.relog();
           } else {
             this.send(get_message(mod.publisher, 'error_char_non_exist'));
@@ -55,24 +55,27 @@ class Relog {
     // mod.majorPatchVersion >= 103 ? 20 : 19
     mod.hookOnce('S_GET_USER_LIST', mod.majorPatchVersion >= 104 ? 21 : 20, { order: -100 }, (e) => {
       e.characters.forEach((ch) => {
-        let { id, name, position } = ch;
+        const { id, name, position } = ch;
         this.list[--position] = { id, name };
       });
     });
 
     mod.hook('C_SELECT_USER', 1, { order: 100, filter: { fake: null } }, (e) => {
       this.index = this.list.findIndex((ch) => ch.id === e.id);
-      mod.log('.. relogging into character ' + (this.index + 1) + '. ' + this.list[this.index].name);
+      mod.log('.. logging into character ' + (this.index + 1) + '. ' + this.list[this.index].name);
     });
 
   }
 
   destructor() {
     this.command.remove(['relog', '캐선']);
+
+    this.command = undefined;
+    this.mod = undefined;
   }
 
   // helper
-  get_user_index(name) {
+  get_userIndex(name) {
     let res = this.list.findIndex((ch) => ch.name.toLowerCase() === name.toLowerCase());
     if (res >= 0) {
       this.index = res;
@@ -81,20 +84,30 @@ class Relog {
     return false;
   }
 
+  async countdown(time) {
+    if (time >= 0) {
+      this.send(`Switching in ${time}`);
+      await this.sleep(1000);
+      this.countdown(--time);
+    }
+  }
+
   relog() {
     let id = this.list[this.index].id;
 
     this.mod.send('C_RETURN_TO_LOBBY', 1, {});
 
     let hook_2;
-    let hook_1 = this.mod.hookOnce('S_PREPARE_RETURN_TO_LOBBY', 1, () => {
-      this.mod.send('S_RETURN_TO_LOBBY', 1, {});
+    let hook_1 = this.mod.hookOnce('S_PREPARE_RETURN_TO_LOBBY', 1, (e) => {
 
       hook_2 = this.mod.hookOnce('S_RETURN_TO_LOBBY', 1, () => {
         process.nextTick(() => {
           this.mod.send('C_SELECT_USER', 1, { id: id, unk: 0 });
         });
       });
+
+      this.countdown(e.time);
+      return false;
     });
 
     this.mod.setTimeout(() => {
@@ -110,9 +123,11 @@ class Relog {
 
   send(msg) { this.command.message(': ' + msg); }
 
+  sleep(ms) { return new Promise((resolve) => { this.mod.setTimeout(resolve, ms); }); }
+
   // reload
   saveState() {
-    let state = {
+    const state = {
       index: this.index,
       list: this.list
     }
