@@ -14,7 +14,7 @@ tera-toolbox module to switch character by chat command
 ### Arguments
 - `<name>`
   - Relog to user `name`
-- `<n>` 
+- `<n>`
   - Relog to `n`-th character in your character list
 - `nx` · `다음`
   - Relog to the next character in your character list
